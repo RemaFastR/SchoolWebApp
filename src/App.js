@@ -1,25 +1,31 @@
 import logo from './logo.svg';
 import './App.css';
+import {Route, BrowserRouter} from "react-router-dom";
+import * as axios from "axios";
+import StudentEdit from "./components/StudentEdit";
+import StudentList from "./components/StudentList";
+import AddStudent from "./components/AddStudent";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+        return (
+            <BrowserRouter>
+                <div className="App">
+                    <Route path='/edit' render={
+                        (props)=><StudentEdit {...props} student={props}/>
+                    }/>
+                    <Route path='/list' render={
+                        ()=><StudentList />
+                    }/>
+                    <Route path='/add' render={
+                        ()=><AddStudent />
+                    }/>
+                </div>
+
+            </BrowserRouter>
+        );
+
 }
 
 export default App;
