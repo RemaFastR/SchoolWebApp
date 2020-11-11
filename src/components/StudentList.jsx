@@ -2,14 +2,6 @@ import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import * as axios from "axios";
 
-let data = [ {
-    "id": 4002,
-    "secondName": "Antonov",
-    "dateOfBirth": "01.02.1997",
-    "mathScore": 4,
-    "informScore": 3,
-    "foreignLangScore": 3
-}]
 
 class StudentList extends React.Component {
     constructor() {
@@ -18,12 +10,28 @@ class StudentList extends React.Component {
             items: [],
             search_student_text: "",
             search_student_age: null,
+            search_input: 'Найти учеников',
+            sample_input: 'Произвести выборку',
+            order_bnt: 'Упорядочить по фамилии'
         };
     }
+
+    tempList = []
+    searched = false
+    isSample = false
+    isOrdered = false
 
     componentDidMount() {
         axios.get(`http://localhost:52751/api/school`).then(response => {
             this.setState({items: response.data});
+            this.tempList = response.data;
+        });
+    }
+
+    componentDidUpdate() {
+        axios.get(`http://localhost:52751/api/school`).then(response => {
+            this.setState({items: response.data});
+            this.tempList = response.data;
         });
     }
 
@@ -35,10 +43,17 @@ class StudentList extends React.Component {
     }
 
     orderBySecName(){
-        axios.get(`http://localhost:52751/api/school/orderby`).then(response => {
-            this.setState({items: response.data});
-            console.log(response.data)
-        });
+        if (this.isOrdered === false){
+            axios.get(`http://localhost:52751/api/school/orderby`).then(response => {
+                this.setState({items: response.data,order_bnt: 'Отменить'});
+                console.log(response.data)
+            });
+            this.isOrdered = true
+        }
+        else{
+            this.setState({items: this.tempList, order_bnt: 'Упорядочить по фамилии'})
+            this.isOrdered = false
+        }
     }
 
     calculate(){
@@ -48,17 +63,31 @@ class StudentList extends React.Component {
     }
 
     search(secName){
-        axios.get(`http://localhost:52751/api/school/search/`+secName).then(response => {
-            this.setState({items: response.data});
-            console.log(response.data)
-        });
+        if (this.searched === false){
+            axios.get(`http://localhost:52751/api/school/search/`+secName).then(response => {
+                this.setState({items: response.data, search_input: 'Исходный список' });
+                console.log(response.data)
+            });
+            this.searched = true
+        }
+        else {
+            this.setState({items: this.tempList, search_input: 'Найти учеников'})
+            this.searched = false
+        }
     }
 
     sample(age){
-        axios.get(`http://localhost:52751/api/school/sample/`+age).then(response => {
-            this.setState({items: response.data});
-            alert("Выведены ученики старше " + age)
-        });
+        if (this.isSample === false){
+            axios.get(`http://localhost:52751/api/school/sample/`+age).then(response => {
+                this.setState({items: response.data, sample_input: 'Исходный список'});
+                alert("Выведены ученики старше " + age)
+            });
+            this.isSample= true
+        }
+       else {
+            this.setState({items: this.tempList, sample_input: 'Произвести выборку'})
+            this.isSample= false
+        }
     }
 
     render() {
@@ -73,7 +102,7 @@ class StudentList extends React.Component {
                             <button type="button" className="btn btn-primary">Добавить ученика</button>
                         </Link>
                         <button type="button" className="btn btn-primary ml-2"
-                                onClick={() => this.orderBySecName()}>Упорядочить по фамилии
+                                onClick={() => this.orderBySecName()}>{this.state.order_bnt}
                         </button>
                         <button type="button" className="btn btn-primary ml-2"
                                 onClick={() => this.calculate()}>Расчет среднего арифметического по трем предметам
@@ -85,7 +114,7 @@ class StudentList extends React.Component {
                                onInput={e => this.setState({ search_student_text: e.target.value})}/>
 
                         <button type="button" className="btn btn-primary ml-2"
-                                onClick={() => this.search(this.state.search_student_text)}>Найти учеников
+                                onClick={() => this.search(this.state.search_student_text)}>{this.state.search_input}
                         </button>
                     </div>
 
@@ -94,7 +123,7 @@ class StudentList extends React.Component {
                                onInput={e => this.setState({ search_student_age: e.target.value})}/>
 
                         <button type="button" className="btn btn-primary ml-2"
-                                onClick={() => this.sample(this.state.search_student_age)}>Прозвести выборку
+                                onClick={() => this.sample(this.state.search_student_age)}>{this.state.sample_input}
                         </button>
                     </div>
 

@@ -25,7 +25,9 @@ const AddStudent = (props) => {
     }
 
     if (added){
-        return <Redirect to="/list" />;
+        return (
+            <Redirect to="/list" />
+            )
     } else {
         return (
 
@@ -35,7 +37,7 @@ const AddStudent = (props) => {
                     <form method="post">
                         <div className="p-3">
                             <input type="text" onInput={e => setSecondName(e.target.value)}
-                                   placeholder={secondName ?? 'Введите фамилию'}
+                                   placeholder={'Введите фамилию'}
                                    className="form-control"/>
                         </div>
                         <div className="p-3">
@@ -44,17 +46,17 @@ const AddStudent = (props) => {
                         </div>
                         <div className="p-3">
                             <input type="text" onInput={e => setMathScore(e.target.value)}
-                                   placeholder={mathScore ?? 'Введите оценку по математике'}
+                                   placeholder={'Введите оценку по математике'}
                                    className="form-control"/>
                         </div>
                         <div className="p-3">
                             <input type="text" onInput={e => setInformScore(e.target.value)}
-                                   placeholder={informScore ?? 'Введите оценку по информатике'}
+                                   placeholder={'Введите оценку по информатике'}
                                    className="form-control"/>
                         </div>
                         <div className="p-3">
                             <input type="text" onInput={e => setForeignLangScore(e.target.value)}
-                                   placeholder={foreignLangScore ?? 'Введите оценку по иностранному языку'}
+                                   placeholder={'Введите оценку по иностранному языку'}
                                    className="form-control"/>
                         </div>
                         <button type="button" className="btn btn-primary p-3"
