@@ -30,7 +30,6 @@ const AddStudent = (props) => {
             )
     } else {
         return (
-
             <div>
                 <div className="container mt-5 mb-5">
                     <h1>Редактирование ученика</h1>

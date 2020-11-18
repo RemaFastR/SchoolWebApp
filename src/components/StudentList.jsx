@@ -29,6 +29,7 @@ class StudentList extends React.Component {
     }
 
     componentDidUpdate() {
+        if (this.searched === false && this.isSample === false && this.isOrdered === false)
         axios.get(`http://localhost:52751/api/school`).then(response => {
             this.setState({items: response.data});
             this.tempList = response.data;
